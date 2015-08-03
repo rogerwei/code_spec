@@ -123,18 +123,10 @@
 ## 1 前言
 
 
-JavaScript在百度一直有着广泛的应用，特别是在浏览器端的行为管理。本文档的目标是使JavaScript代码风格保持一致，容易被理解和被维护。
-
-虽然本文档是针对JavaScript设计的，但是在使用各种JavaScript的预编译语言时(如TypeScript等)时，适用的部分也应尽量遵循本文档的约定。
-
+本文档的目标是使JavaScript代码风格保持一致，容易被理解和被维护。
 
 
 ## 2 代码风格
-
-
-
-
-
 
 ### 2.1 文件
 
@@ -521,30 +513,7 @@ foo(
     callback
 );
 
-// 也可以按逻辑对参数进行组合。
-// 最经典的是baidu.format函数，调用时将参数分为“模板”和“数据”两块
-baidu.format(
-    dateFormatTemplate,
-    year, month, date, hour, minute, second
-);
-
-// 当函数调用时，如果有一个或以上参数跨越多行，应当每一个参数独立一行。
-// 这通常出现在匿名函数或者对象初始化等作为参数时，如setTimeout函数等。
-setTimeout(
-    function () {
-        alert('hello');
-    },
-    200
-);
-
-order.data.read(
-    'id=' + me.model.id, 
-    function (data) {
-        me.attchToModel(data.result);
-        callback();
-    }, 
-    300
-);
+  
 
 // 链式调用较长时采用缩进进行调整。
 $('#items')
@@ -552,13 +521,6 @@ $('#items')
     .highlight()
     .end();
 
-// 三元运算符由3部分组成，因此其换行应当根据每个部分的长度不同，形成不同的情况。
-var result = thisIsAVeryVeryLongCondition
-    ? resultA : resultB;
-
-var result = condition
-    ? thisIsAVeryVeryLongResult
-    : resultB;
 
 // 数组和对象初始化的混用，严格按照每个对象的 { 和结束 } 在独立一行的风格书写。
 var array = [
@@ -843,42 +805,7 @@ loadingData.then(callback);
 
 
 
-#### 2.4.4 类型定义
-
-
-##### [强制] 类型定义都是以`{`开始, 以`}`结束。
-
-解释：
-
-常用类型如：{string}, {number}, {boolean}, {Object}, {Function}, {RegExp}, {Array}, {Date}。
-
-类型不仅局限于内置的类型，也可以是自定义的类型。比如定义了一个类 Developer，就可以使用它来定义一个参数和返回值的类型。
-
-
-##### [强制] 对于基本类型 {string}, {number}, {boolean}，首字母必须小写。
-
-| 类型定义 | 语法示例 | 解释 |
-| ------- | ------- | --- |
-|String|{string}|--|
-|Number|{number}|--|
-|Boolean|{boolean}|--|
-|Object|{Object}|--|
-|Function|{Function}|--|
-|RegExp|{RegExp}|--|
-|Array|{Array}|--|
-|Date|{Date}|--|
-|单一类型集合|{Array.&lt;string&gt;}|string 类型的数组|
-|多类型|{(number｜boolean)}|可能是 number 类型, 也可能是 boolean 类型|
-|允许为null|{?number}|可能是 number, 也可能是 null|
-|不允许为null|{!Object}|Object 类型, 但不是 null|
-|Function类型|{function(number, boolean)}|函数, 形参类型|
-|Function带返回值|{function(number, boolean):string}|函数, 形参, 返回值类型|
-|参数可选|@param {string=} name|可选参数, =为类型后缀|
-|可变参数|@param {...number} args|变长参数,  ...为类型前缀|
-|任意类型|{*}|任意类型|
-|可选任意类型|@param {*=} name|可选参数，类型不限|
-|可变任意类型|@param {...*} args|变长参数，类型不限|
-
+ 
 
 #### 2.4.5 文件注释
 
@@ -973,36 +900,7 @@ function Fronteer() {
 util.inherits(Fronteer, Developer);
 ```
 
-##### [强制] 使用包装方式扩展类成员时， 必须通过 `@lends` 进行重新指向。
-
-解释：
-
-没有 `@lends` 标记将无法为该类生成包含扩展类成员的文档。
-
-
-示例：
-
-```javascript
-/**
- * 类描述
- *
- * @class
- * @extends Developer
- */
-function Fronteer() {
-    Developer.call(this);
-    // constructor body
-}
-
-util.extend(
-    Fronteer.prototype,
-    /** @lends Fronteer.prototype */{
-        _getLevel: function () {
-            // TODO
-        }
-    }
-);
-```
+ 
 
 ##### [强制] 类的属性或方法等成员信息使用 `@public` / `@protected` / `@private` 中的任意一个，指明可访问性。
 
@@ -1202,262 +1100,7 @@ var servers = [
 ];
 ```
 
-
-#### 2.4.12 AMD 模块注释
-
-
-##### [强制] AMD 模块使用 `@module` 或 `@exports` 标识。
-
-解释：
-
-@exports 与 @module 都可以用来标识模块，区别在于 @module 可以省略模块名称。而只使用 @exports 时在 namepaths 中可以省略 module: 前缀。
-
-
-示例：
-
-```javascript
-define(
-    function (require) {
-
-        /**
-         * foo description
-         *
-         * @exports Foo
-         */
-        var foo = {
-            // TODO
-        };
-
-        /**
-         * baz description
-         *
-         * @return {boolean} return description
-         */
-        foo.baz = function () {
-            // TODO
-        };
-
-        return foo;
-
-    }
-);
-```
-
-也可以在 exports 变量前使用 @module 标识：
-
-```javascript
-define(
-    function (require) {
-
-        /**
-         * module description.
-         *
-         * @module foo
-         */
-        var exports = {};
-
-
-        /**
-         * bar description
-         *
-         */
-        exports.bar = function () {
-            // TODO
-        };
-
-        return exports;
-    }
-);
-```
-
-如果直接使用 factory 的 exports 参数，还可以：
-
-```javascript
-/**
- * module description.
- *
- * @module
- */
-define(
-    function (require, exports) {
-
-        /**
-         * bar description
-         *
-         */
-        exports.bar = function () {
-            // TODO
-        };
-        return exports;
-    }
-);
-```
-
-##### [强制] 对于已使用 `@module` 标识为 AMD模块 的引用，在 `namepaths` 中必须增加 `module:` 作前缀。
-
-解释：
-
-namepaths 没有 module: 前缀时，生成的文档中将无法正确生成链接。
-
-示例：
-
-```javascript
-/**
- * 点击处理
- *
- * @fires module:Select#change
- * @private
- */
-Select.prototype.clickHandler = function () {
-    /**
-     * 值变更时触发
-     *
-     * @event module:Select#change
-     * @param {Object} e e描述
-     * @param {string} e.before before描述
-     * @param {string} e.after after描述
-     */
-    this.fire(
-        'change',
-        {
-            before: 'foo',
-            after: 'bar'
-        }
-    );
-};
-```
-
-##### [建议] 对于类定义的模块，可以使用 `@alias` 标识构建函数。
-
-示例：
-
-```javascript
-/**
- * A module representing a jacket.
- * @module jacket
- */
-define(
-    function () {
-
-        /**
-         * @class
-         * @alias module:jacket
-         */
-        var Jacket = function () {
-        };
-
-        return Jacket;
-    }
-);
-```
-
-
-##### [建议] 多模块定义时，可以使用 `@exports` 标识各个模块。
-
-示例：
-
-```javascript
-// one module
-define('html/utils',
-    /**
-     * Utility functions to ease working with DOM elements.
-     * @exports html/utils
-     */
-    function () {
-        var exports = {
-        };
-
-        return exports;
-    }
-);
-
-// another module
-define('tag',
-    /** @exports tag */
-    function () {
-        var exports = {
-        };
-
-        return exports;
-    }
-);
-```
-
-##### [建议] 对于 exports 为 Object 的模块，可以使用`@namespace`标识。
-
-解释：
-
-使用 @namespace 而不是 @module 或 @exports 时，对模块的引用可以省略 module: 前缀。
-
-##### [建议] 对于 exports 为类名的模块，使用 `@class` 和 `@exports` 标识。
-
-
-示例：
-
-```javascript
-
-// 只使用 @class Bar 时，类方法和属性都必须增加 @name Bar#methodName 来标识，与 @exports 配合可以免除这一麻烦，并且在引用时可以省去 module: 前缀。
-// 另外需要注意类名需要使用 var 定义的方式。
-
-/**
- * Bar description
- *
- * @see foo
- * @exports  Bar
- * @class
- */
-var Bar = function () {
-    // TODO
-};
-
-/**
- * baz description
- *
- * @return {(string|Array)} return description
- */
-Bar.prototype.baz = function () {
-    // TODO
-};
-```
-
-
-#### 2.4.13 细节注释
-
-
-对于内部实现、不容易理解的逻辑说明、摘要信息等，我们可能需要编写细节注释。
-
-#### [建议] 细节注释遵循单行注释的格式。说明必须换行时，每行是一个单行注释的起始。
-
-示例：
-
-```javascript
-function foo(p1, p2) {
-    // 这里对具体内部逻辑进行说明
-    // 说明太长需要换行
-    for (...) {
-        ....
-    }
-}
-```
-
-##### [强制] 有时我们会使用一些特殊标记进行说明。特殊标记必须使用单行注释的形式。下面列举了一些常用标记：
-
-解释：
-
-1. TODO: 有功能待实现。此时需要对将要实现的功能进行简单说明。
-2. FIXME: 该处代码运行没问题，但可能由于时间赶或者其他原因，需要修正。此时需要对如何修正进行简单说明。
-3. HACK: 为修正某些问题而写的不太好或者使用了某些诡异手段的代码。此时需要对思路或诡异手段进行描述。
-4. XXX: 该处存在陷阱。此时需要对陷阱进行描述。
-
-
-
-
 ## 3 语言特性
-
-
-
-
-
 
 ### 3.1 变量
 
