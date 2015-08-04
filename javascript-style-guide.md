@@ -1199,7 +1199,7 @@ function kv2List(source) {
 ### 3.2 条件
 
 
-##### [强制] 在 Equality Expression 中使用类型严格的 `===`。仅当判断 null 或 undefined 时，允许使用 `== null`。
+##### [建议] 在 Equality Expression 中使用类型严格的 `===`。仅当判断 null 或 undefined 时，允许使用 `== null`。
 
 解释：
 
@@ -1294,17 +1294,6 @@ if (noValue === null || typeof noValue === 'undefined') {
   // ......
 }
 ```
-
-
-##### [建议] 按执行频率排列分支的顺序。
-
-解释：
-
-按执行频率排列分支的顺序好处是：
-
-1. 阅读的人容易找到最常见的情况，增加可读性。
-2. 提高执行效率。
-
 
 ##### [建议] 对于相同变量或表达式的多值条件，用 `switch` 代替 `if`。
 
@@ -1431,26 +1420,7 @@ for (var i = 0, len = elements.length; i < len; i++) {
     // ......
 }
 ```
-
-##### [建议] 对有序集合进行顺序无关的遍历时，使用逆序遍历。
-
-解释：
-
-逆序遍历可以节省变量，代码比较优化。
-
-示例：
-
-```javascript
-var len = elements.length;
-while (len--) {
-    var element = elements[len];
-    // ......
-}
-```
-
-
-
-
+ 
 
 ### 3.4 类型
 
@@ -1533,17 +1503,6 @@ var width = '200px';
 parseInt(width, 10);
 ```
 
-##### [强制] 使用 `parseInt` 时，必须指定进制。
-
-示例：
-
-```javascript
-// good
-parseInt(str, 10);
-
-// bad
-parseInt(str);
-```
 
 ##### [建议] 转换成 `boolean` 时，使用 `!!`。
 
@@ -1553,23 +1512,6 @@ parseInt(str);
 var num = 3.14;
 !!num;
 ```
-
-##### [建议] `number` 去除小数点，使用 `Math.floor / Math.round / Math.ceil`，不使用 `parseInt`。
-
-示例：
-
-```javascript
-// good
-var num = 3.14;
-Math.ceil(num);
-
-// bad
-var num = 3.14;
-parseInt(num, 10);
-```
-
-
-
 
 ### 3.5 字符串
 
@@ -1910,39 +1852,7 @@ function removeElement(element, options) {
 #### 3.8.3 闭包
 
 
-##### [建议] 在适当的时候将闭包内大对象置为 `null`。
-
-解释：
-
-在 JavaScript 中，无需特别的关键词就可以使用闭包，一个函数可以任意访问在其定义的作用域外的变量。需要注意的是，函数的作用域是静态的，即在定义时决定，与调用的时机和方式没有任何关系。
-
-闭包会阻止一些变量的垃圾回收，对于较老旧的JavaScript引擎，可能导致外部所有变量均无法回收。
-
-首先一个较为明确的结论是，以下内容会影响到闭包内变量的回收：
-
-- 嵌套的函数中是否有使用该变量。
-- 嵌套的函数中是否有 **直接调用eval**。
-- 是否使用了 with 表达式。
-
-Chakra、V8 和 SpiderMonkey 将受以上因素的影响，表现出不尽相同又较为相似的回收策略，而JScript.dll和Carakan则完全没有这方面的优化，会完整保留整个 LexicalEnvironment 中的所有变量绑定，造成一定的内存消耗。
-
-由于对闭包内变量有回收优化策略的 Chakra、V8 和 SpiderMonkey 引擎的行为较为相似，因此可以总结如下，当返回一个函数 fn 时：
-
-1. 如果 fn 的 [[Scope]] 是ObjectEnvironment（with 表达式生成 ObjectEnvironment，函数和 catch 表达式生成 DeclarativeEnvironment），则：
-    1. 如果是 V8 引擎，则退出全过程。
-    2. 如果是 SpiderMonkey，则处理该 ObjectEnvironment 的外层 LexicalEnvironment。
-2. 获取当前 LexicalEnvironment 下的所有类型为 Function 的对象，对于每一个 Function 对象，分析其 FunctionBody：
-    1. 如果 FunctionBody 中含有 **直接调用eval**，则退出全过程。
-    2. 否则得到所有的 Identifier。
-    3. 对于每一个 Identifier，设其为 name，根据查找变量引用的规则，从 LexicalEnvironment 中找出名称为 name 的绑定 binding。
-    4. 对 binding 添加 notSwap 属性，其值为 true。
-3. 检查当前 LexicalEnvironment 中的每一个变量绑定，如果该绑定有 notSwap 属性且值为 true，则：
-    1. 如果是V8引擎，删除该绑定。
-    2. 如果是SpiderMonkey，将该绑定的值设为 undefined，将删除 notSwap 属性。
-
-对于Chakra引擎，暂无法得知是按 V8 的模式还是按 SpiderMonkey 的模式进行。
-
-如果有 **非常庞大** 的对象，且预计会在 **老旧的引擎** 中执行，则使用闭包时，注意将闭包不需要的对象置为空引用。
+ 
 
 ##### [建议] 使用 `IIFE` 避免 `Lift 效应`。
 
@@ -1985,38 +1895,7 @@ while (len--) {
 }
 ```
 
-#### 3.8.4 空函数
-
-
-##### [建议] 空函数不使用 `new Function()` 的形式。
-
-示例：
-
-```javascript
-var emptyFunction = function () {};
-```
-
-##### [建议] 对于性能有高要求的场合，建议存在一个空函数的常量，供多处使用共享。
-
-示例：
-
-```javascript
-var EMPTY_FUNCTION = function () {};
-
-function MyClass() {
-}
-
-MyClass.prototype.abstractMethod = EMPTY_FUNCTION;
-MyClass.prototype.hooks.before = EMPTY_FUNCTION;
-MyClass.prototype.hooks.after = EMPTY_FUNCTION;
-```
-
-
-
-
-
-
-
+ 
 ### 3.9 面向对象
 
 
@@ -2150,50 +2029,6 @@ var result = handler($('#x').val(), $('#y').val());
 ```
 
 
-
-#### 3.10.3 with
-
-
-##### [建议] 尽量不要使用 `with`。
-
-解释：
-
-使用 with 可能会增加代码的复杂度，不利于阅读和管理；也会对性能有影响。大多数使用 with 的场景都能使用其他方式较好的替代。所以，尽量不要使用 with。
-
-
-
-
-#### 3.10.4 delete
-
-
-##### [建议] 减少 `delete` 的使用。
-
-解释：
-
-如果没有特别的需求，减少或避免使用`delete`。`delete`的使用会破坏部分 JavaScript 引擎的性能优化。
-
-
-##### [建议] 处理 `delete` 可能产生的异常。
-
-解释：
-
-对于有被遍历需求，且值 null 被认为具有业务逻辑意义的值的对象，移除某个属性必须使用 delete 操作。
-
-在严格模式或IE下使用 delete 时，不能被删除的属性会抛出异常，因此在不确定属性是否可以删除的情况下，建议添加 try-catch 块。
-
-示例：
-
-```javascript
-try {
-    delete o.x;
-}
-catch (deleteError) {
-    o.x = null;
-}
-```
-
-
-
 #### 3.10.5 对象属性
 
 
@@ -2261,148 +2096,7 @@ Tree.prototype.selectNode = function (id) {
 
 ## 4 浏览器环境
 
-
-
-
-### 4.1 模块化
-
-
-#### 4.1.1 AMD
-
-
-##### [强制] 使用 `AMD` 作为模块定义。
-
-解释：
-
-AMD 作为由社区认可的模块定义形式，提供多种重载提供灵活的使用方式，并且绝大多数优秀的 Library 都支持 AMD，适合作为规范。
-
-目前，比较成熟的 AMD Loader 有：
-
-- 官方实现的 [requirejs](http://requirejs.org/)
-- 百度自己实现的 [esl](https://github.com/ecomfe/esl)
-
-
-##### [强制] 模块 `id` 必须符合标准。
-
-解释：
-
-模块 id 必须符合以下约束条件：
-
-1. 类型为 string，并且是由 `/` 分割的一系列 terms 来组成。例如：`this/is/a/module`。
-2. term 应该符合 [a-zA-Z0-9_-]+ 规则。
-3. 不应该有 .js 后缀。
-4. 跟文件的路径保持一致。
-
-
-
-#### 4.1.2 define
-
-
-##### [建议] 定义模块时不要指明 `id` 和 `dependencies`。
-
-解释：
-
-在 AMD 的设计思想里，模块名称是和所在路径相关的，匿名的模块更利于封包和迁移。模块依赖应在模块定义内部通过 local require 引用。
-
-所以，推荐使用 define(factory) 的形式进行模块定义。
-
-
-示例：
-
-```javascript
-define(
-    function (require) {
-    }
-);
-```
-
-
-##### [建议] 使用 `return` 来返回模块定义。
-
-解释：
-
-使用 return 可以减少 factory 接收的参数（不需要接收 exports 和 module），在没有 AMD Loader 的场景下也更容易进行简单的处理来伪造一个 Loader。
-
-示例：
-
-```javascript
-define(
-    function (require) {
-        var exports = {};
-
-        // ...
-
-        return exports;
-    }
-);
-```
-
-
-
-
-#### 4.1.3 require
-
-
-##### [强制] 全局运行环境中，`require` 必须以 `async require` 形式调用。
-
-解释：
-
-模块的加载过程是异步的，同步调用并无法保证得到正确的结果。
-
-示例：
-
-```javascript
-// good
-require(['foo'], function (foo) {
-});
-
-// bad
-var foo = require('foo');
-```
-
-##### [强制] 模块定义中只允许使用 `local require`，不允许使用 `global require`。
-
-解释：
-
-1. 在模块定义中使用 global require，对封装性是一种破坏。
-2. 在 AMD 里，global require 是可以被重命名的。并且 Loader 甚至没有全局的 require 变量，而是用 Loader 名称做为 global require。模块定义不应该依赖使用的 Loader。
-
-
-##### [强制] Package在实现时，内部模块的 `require` 必须使用 `relative id`。
-
-解释：
-
-对于任何可能通过 发布-引入 的形式复用的第三方库、框架、包，开发者所定义的名称不代表使用者使用的名称。因此不要基于任何名称的假设。在实现源码中，require 自身的其它模块时使用 relative id。
-
-示例：
-
-```javascript
-define(
-    function (require) {
-        var util = require('./util');
-    }
-);
-```
-
-
-##### [建议] 不会被调用的依赖模块，在 `factory` 开始处统一 `require`。
-
-解释：
-
-有些模块是依赖的模块，但不会在模块实现中被直接调用，最为典型的是 css / js / tpl 等 Plugin 所引入的外部内容。此类内容建议放在模块定义最开始处统一引用。
-
-示例：
-
-```javascript
-define(
-    function (require) {
-        require('css!foo.css');
-        require('tpl!bar.tpl.html');
-
-        // ...
-    }
-);
-```
+ 
 
 
 
@@ -2524,6 +2218,3 @@ expando 属性绑定事件容易导致互相覆盖。
 
 
 ##### [建议] 在没有事件自动管理的框架支持下，应持有监听器函数的引用，在适当时候（元素释放、页面卸载等）移除添加的监听器。
-
-
-
