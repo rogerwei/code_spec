@@ -754,17 +754,6 @@ var isReady = false;
 var hasMoreCommands = false;
 ```
 
-##### [建议] `Promise对象` 用 `动宾短语的进行时` 表达。
-
-示例：
-
-```javascript
-var loadingData = ajax.get('url');
-loadingData.then(callback);
-```
-
-
-
 
 ### 2.4 注释
 
@@ -779,35 +768,10 @@ loadingData.then(callback);
 
 ##### [建议] 避免使用 `/*...*/` 这样的多行注释。有多行注释内容时，使用多个单行注释。
 
-
-#### 2.4.3 文档化注释
-
-
-##### [强制] 为了便于代码阅读和自文档化，以下内容必须包含以 `/**...*/` 形式的块注释中。
-
-解释：
-
-1. 文件
-2. namespace
-3. 类
-4. 函数或方法
-5. 类属性
-6. 事件
-7. 全局变量
-8. 常量
-9. AMD 模块
-
-
-##### [强制] 文档注释前必须空一行。
-
-
-##### [建议] 自文档化的文档说明 what，而不是 how。
-
-
-
  
+#### 2.4.3
 
-#### 2.4.5 文件注释
+ 文件注释
 
 
 ##### [强制] 文件顶部必须包含文件注释，用 `@file` 标识文件说明。
@@ -845,7 +809,7 @@ loadingData.then(callback);
  */
 ```
 
-#### 2.4.6 命名空间注释
+#### 2.4.4 命名空间注释
 
 
 ##### [建议] 命名空间使用 `@namespace` 标识。
@@ -859,7 +823,7 @@ loadingData.then(callback);
 var util = {};
 ```
 
-#### 2.4.7 类注释
+#### 2.4.5 类注释
 
 
 ##### [建议] 使用 `@class` 标记类或构造函数。
@@ -943,7 +907,7 @@ Fronteer.prototype._getLevel = function () {
 ```
 
 
-#### 2.4.8 函数/方法注释
+#### 2.4.6 函数/方法注释
 
 
 ##### [强制] 函数/方法注释必须包含函数说明，有参数和返回值时必须使用注释标识。
@@ -997,7 +961,7 @@ function foo(option) {
 
 简而言之，当子类重写的方法能直接套用父类的方法注释时可省略对参数与返回值的注释。
 
-#### 2.4.9 事件注释
+#### 2.4.7 事件注释
 
 
 ##### [强制] 必须使用 `@event` 标识事件，事件参数的标识与方法描述的参数标识相同。
@@ -1016,40 +980,9 @@ function foo(option) {
 onchange: function (e) {
 }
 ```
+ 
 
-##### [强制] 在会广播事件的函数前使用 `@fires` 标识广播的事件，在广播事件代码前使用 `@event` 标识事件。
-
-##### [建议] 对于事件对象的注释，使用 `@param` 标识，生成文档时可读性更好。
-
-示例：
-
-```javascript
-/**
- * 点击处理
- *
- * @fires Select#change
- * @private
- */
-Select.prototype.clickHandler = function () {
-    /**
-     * 值变更时触发
-     *
-     * @event Select#change
-     * @param {Object} e e描述
-     * @param {string} e.before before描述
-     * @param {string} e.after after描述
-     */
-    this.fire(
-        'change',
-        {
-            before: 'foo',
-            after: 'bar'
-        }
-    );
-};
-```
-
-#### 2.4.10 常量注释
+#### 2.4.8 常量注释
 
 
 ##### [强制] 常量必须使用 `@const` 标记，并包含说明和类型信息。
@@ -1064,40 +997,6 @@ Select.prototype.clickHandler = function () {
  * @type {string}
  */
 var REQUEST_URL = 'myurl.do';
-```
-
-#### 2.4.11 复杂类型注释
-
-
-##### [建议] 对于类型未定义的复杂结构的注释，可以使用 `@typedef` 标识来定义。
-
-示例：
-
-```javascript
-// `namespaceA~` 可以换成其它 namepaths 前缀，目的是为了生成文档中能显示 `@typedef` 定义的类型和链接。
-/**
- * 服务器
- *
- * @typedef {Object} namespaceA~Server
- * @property {string} host 主机
- * @property {number} port 端口
- */
-
-/**
- * 服务器列表
- *
- * @type {Array.<namespaceA~Server>}
- */
-var servers = [
-    {
-        host: '1.2.3.4',
-        port: 8080
-    },
-    {
-        host: '1.2.3.5',
-        port: 8081
-    }
-];
 ```
 
 ## 3 语言特性
@@ -1402,25 +1301,7 @@ for (var i = 0, len = elements.length; i < len; i++) {
     element.style.width = wrap.offsetWidth + 'px';
     // ......
 }
-```
-
-
-##### [建议] 对有序集合进行遍历时，缓存 `length`。
-
-解释：
-
-虽然现代浏览器都对数组长度进行了缓存，但对于一些宿主对象和老旧浏览器的数组对象，在每次 length 访问时会动态计算元素个数，此时缓存 length 能有效提高程序性能。
-
-
-示例：
-
-```javascript
-for (var i = 0, len = elements.length; i < len; i++) {
-    var element = elements[i];
-    // ......
-}
-```
- 
+``` 
 
 ### 3.4 类型
 
@@ -1530,26 +1411,16 @@ var str = '我是一个字符串';
 var html = '<div class="cls">拼接HTML可以省去双引号转义</div>';
 ```
 
-##### [建议] 使用 `数组` 或 `+` 拼接字符串。
+##### [建议] 使用 `+` 拼接字符串。
 
 解释：
 
 1. 使用 + 拼接字符串，如果拼接的全部是 StringLiteral，压缩工具可以对其进行自动合并的优化。所以，静态字符串建议使用 + 拼接。
 2. 在现代浏览器下，使用 + 拼接字符串，性能较数组的方式要高。
-3. 如需要兼顾老旧浏览器，应尽量使用数组拼接字符串。
 
 示例：
 
-```javascript
-// 使用数组拼接字符串
-var str = [
-    // 推荐换行开始并缩进开始第一个字符串, 对齐代码, 方便阅读.
-    '<ul>',
-        '<li>第一项</li>',
-        '<li>第二项</li>',
-    '</ul>'
-].join('');
-
+ 
 // 使用 + 拼接字符串
 var str2 = '' // 建议第一个为空字符串, 第二个换行开始并缩进开始, 对齐代码, 方便阅读
     + '<ul>',
@@ -1797,8 +1668,6 @@ function checkAAvailability() {
 
 除去不定长参数以外，函数具备不同逻辑意义的参数建议控制在 6 个以内，过多参数会导致维护难度增大。
 
-某些情况下，如使用 AMD Loader 的 require 加载多个模块时，其 callback 可能会存在较多参数，因此对函数参数的个数不做强制限制。
-
 
 ##### [建议] 通过 `options` 参数传递非数据输入型参数。
 
@@ -2029,81 +1898,13 @@ var result = handler($('#x').val(), $('#y').val());
 ```
 
 
-#### 3.10.5 对象属性
-
-
-
-##### [建议] 避免修改外部传入的对象。
-
-解释：
-
-JavaScript 因其脚本语言的动态特性，当一个对象未被 seal 或 freeze 时，可以任意添加、删除、修改属性值。
-
-但是随意地对 非自身控制的对象 进行修改，很容易造成代码在不可预知的情况下出现问题。因此，设计良好的组件、函数应该避免对外部传入的对象的修改。
-
-下面代码的 selectNode 方法修改了由外部传入的 datasource 对象。如果 datasource 用在其它场合（如另一个 Tree 实例）下，会造成状态的混乱。
-
-```javascript
-function Tree(datasource) {
-    this.datasource = datasource;
-}
-
-Tree.prototype.selectNode = function (id) {
-    // 从datasource中找出节点对象
-    var node = this.findNode(id);
-    if (node) {
-        node.selected = true;
-        this.flushView();
-    }
-};
-```
-
-对于此类场景，需要使用额外的对象来维护，使用由自身控制，不与外部产生任何交互的 selectedNodeIndex 对象来维护节点的选中状态，不对 datasource 作任何修改。
-
-```javascript
-function Tree(datasource) {
-    this.datasource = datasource;
-    this.selectedNodeIndex = {};
-}
-
-Tree.prototype.selectNode = function (id) {
-    // 从datasource中找出节点对象
-    var node = this.findNode(id);
-    if (node) {
-        this.selectedNodeIndex[id] = true;
-        this.flushView();
-    }
-};
-```
-
-除此之外，也可以通过 deepClone 等手段将自身维护的对象与外部传入的分离，保证不会相互影响。
-
-
-##### [建议] 具备强类型的设计。
-
-解释：
-
-- 如果一个属性被设计为 boolean 类型，则不要使用 1 / 0 作为其值。对于标识性的属性，如对代码体积有严格要求，可以从一开始就设计为 number 类型且将 0 作为否定值。
-- 从 DOM 中取出的值通常为 string 类型，如果有对象或函数的接收类型为 number 类型，提前作好转换，而不是期望对象、函数可以处理多类型的值。
-
-
-
-
-
-
-
-
-
 ## 4 浏览器环境
 
- 
+
+### 4.1 DOM
 
 
-
-### 4.2 DOM
-
-
-#### 4.2.1 元素获取
+#### 4.1.1 元素获取
 
 
 ##### [建议] 对于单个元素，尽可能使用 `document.getElementById` 获取，避免使用`document.all`。
@@ -2145,7 +1946,7 @@ alert(elements[0].tagName);
 
 
 
-#### 4.2.2 样式获取
+#### 4.1.2 样式获取
 
 
 ##### [建议] 获取元素实际样式信息时，应使用 `getComputedStyle` 或 `currentStyle`。
@@ -2157,7 +1958,7 @@ alert(elements[0].tagName);
 
 
 
-#### 4.2.3 样式设置
+#### 4.1.3 样式设置
 
 
 ##### [建议] 尽可能通过为元素添加预定义的 className 来改变元素样式，避免直接操作 style 设置。
@@ -2171,7 +1972,7 @@ alert(elements[0].tagName);
 
 
 
-#### 4.2.4 DOM 操作
+#### 4.1.4 DOM 操作
 
 
 ##### [建议] 操作 `DOM` 时，尽量减少页面 `reflow`。
@@ -2200,7 +2001,7 @@ DOM 操作也是非常耗时的一种操作，减少 DOM 操作有助于提高�
 
 
 
-#### 4.2.5 DOM 事件
+#### 4.1.5 DOM 事件
 
 
 ##### [建议] 优先使用 `addEventListener / attachEvent` 绑定事件，避免直接在 HTML 属性中或 DOM 的 `expando` 属性绑定事件处理。
