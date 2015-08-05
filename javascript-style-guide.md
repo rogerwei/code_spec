@@ -64,8 +64,6 @@
 
 　　　　[3.8.3 闭包](#user-content-383-闭包)
 
-　　　　[3.8.4 空函数](#user-content-384-空函数)
-
 　　[3.9 面向对象](#user-content-39-面向对象)
 
 　　[3.10 动态特性](#user-content-310-动态特性)
@@ -74,33 +72,20 @@
 
 　　　　[3.10.2 动态执行代码](#user-content-3102-动态执行代码)
 
-　　　　[3.10.3 with](#user-content-3103-with)
-
-　　　　[3.10.4 delete](#user-content-3104-delete)
-
-　　　　[3.10.5 对象属性](#user-content-3105-对象属性)
 
 [4 浏览器环境](#user-content-4-浏览器环境)
 
-　　[4.1 模块化](#user-content-41-模块化)
+　　[4.1 DOM](#41-dom)
 
-　　　　[4.1.1 AMD](#user-content-411-amd)
+　　　　[4.1.1 元素获取](#user-content-411-元素获取)
 
-　　　　[4.1.2 define](#user-content-412-define)
+　　　　[4.1.2 样式获取](#user-content-412-样式获取)
 
-　　　　[4.1.3 require](#user-content-413-require)
+　　　　[4.1.3 样式设置](#user-content-413-样式设置)
 
-　　[4.2 DOM](#42-dom)
+　　　　[4.1.4 DOM 操作](#user-content-414-dom-操作)
 
-　　　　[4.2.1 元素获取](#user-content-421-元素获取)
-
-　　　　[4.2.2 样式获取](#user-content-422-样式获取)
-
-　　　　[4.2.3 样式设置](#user-content-423-样式设置)
-
-　　　　[4.2.4 DOM 操作](#user-content-424-dom-操作)
-
-　　　　[4.2.5 DOM 事件](#user-content-425-dom-事件)
+　　　　[4.1.5 DOM 事件](#user-content-415-dom-事件)
 
 
 
@@ -1405,7 +1390,8 @@ var html = '<div class="cls">拼接HTML可以省去双引号转义</div>';
 示例：
 
  
-``` // 使用 + 拼接字符串
+``` 
+// 使用 + 拼接字符串
 var str2 = '' // 建议第一个为空字符串, 第二个换行开始并缩进开始, 对齐代码, 方便阅读
     + '<ul>',
     +    '<li>第一项</li>',
